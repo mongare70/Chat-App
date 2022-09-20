@@ -1,8 +1,12 @@
-import React from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 import { TextInput } from "./components/TextInput";
 import { MessageLeft, MessageRight } from "./components/Message";
+
+import Modal from "./components/UI/Modal";
+import Backdrop from "./components/UI/Backdrop";
+import NewUser from "./components/forms/NewUser";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,10 +44,36 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function App() {
+export default function App(props) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [sessionChange, setSessionChange] = useState(false);
+
+  const handleSessionChange = (data) => {
+    setSessionChange(data);
+  };
+
+  let user = sessionStorage.getItem("user");
+
+  useEffect(() => {
+    if (!user) {
+      setModalIsOpen(true);
+    } else {
+      setModalIsOpen(false);
+    }
+  }, [user, sessionChange]);
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
+      {modalIsOpen && (
+        <Fragment>
+          <Backdrop />
+          <Modal>
+            <NewUser sessionChange={handleSessionChange} />
+          </Modal>
+        </Fragment>
+      )}
+
       <Paper className={classes.paper} zDepth={2}>
         <Paper id="style-1" className={classes.messagesBody}>
           <MessageLeft
