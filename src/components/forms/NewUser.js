@@ -2,7 +2,7 @@ import { useState } from "react";
 import useInput from "../../hooks/use-input";
 import classes from "./NewUser.module.css";
 
-const NewUser = (props) => {
+const NewUser = () => {
   const [formHasError, setFormHasError] = useState(false);
 
   const {
@@ -24,7 +24,6 @@ const NewUser = (props) => {
 
     setFormHasError(false);
     sessionStorage.setItem("user", enteredUsername);
-    props.sessionChange(true);
 
     resetUsernameInput();
   };

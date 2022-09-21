@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
-import { TextInput } from "./components/TextInput";
-import { MessageLeft, MessageRight } from "./components/Message";
+import { TextInput } from "./components/forms/TextInput";
 
 import Modal from "./components/UI/Modal";
 import Backdrop from "./components/UI/Backdrop";
 import NewUser from "./components/forms/NewUser";
+import MessageList from "./components/messages/MessageList";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,23 +44,25 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function App(props) {
+export default function App() {
+  const [intervalCount, setIntervalCount] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [sessionChange, setSessionChange] = useState(false);
-
-  const handleSessionChange = (data) => {
-    setSessionChange(data);
-  };
-
-  let user = sessionStorage.getItem("user");
 
   useEffect(() => {
-    if (!user) {
+    if (!sessionStorage.getItem("user")) {
       setModalIsOpen(true);
     } else {
       setModalIsOpen(false);
     }
-  }, [user, sessionChange]);
+
+    const timeout = setTimeout(() => {
+      setIntervalCount((count) => count + 1);
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [intervalCount]);
 
   const classes = useStyles();
   return (
@@ -69,41 +71,14 @@ export default function App(props) {
         <Fragment>
           <Backdrop />
           <Modal>
-            <NewUser sessionChange={handleSessionChange} />
+            <NewUser />
           </Modal>
         </Fragment>
       )}
 
       <Paper className={classes.paper} zDepth={2}>
         <Paper id="style-1" className={classes.messagesBody}>
-          <MessageLeft
-            message="あめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName=""
-            avatarDisp={true}
-          />
-          <MessageLeft
-            message="xxxxxhttps://yahoo.co.jp xxxxxxxxxあめんぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさいすせそ"
-            timestamp="MM/DD 00:00"
-            photoURL=""
-            displayName="テスト"
-            avatarDisp={false}
-          />
-          <MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={true}
-          />
-          <MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          />
+          <MessageList />
         </Paper>
         <TextInput />
       </Paper>
