@@ -25,6 +25,8 @@ When a user first visits the chat, he/she is prompted to enter his username, whi
 #3. Usage
 The following screencast shows how to run the app. Check it out:
 
+https://user-images.githubusercontent.com/46082842/191724734-9481b15a-60a8-468b-8db2-4be1afd1e7af.mp4
+
 #4. Tests
 
 After ensuring you're within the **Chat-App folder** run :
